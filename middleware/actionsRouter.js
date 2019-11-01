@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const validateActionId = require('./validateActionId.js');
+const validateAction = require('./validateAction.js');
+
 const Actions = require('../actions/actionModel.js');
 
 router.get("/", (req, res) => {

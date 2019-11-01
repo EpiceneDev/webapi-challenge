@@ -1,11 +1,13 @@
 const router = require('express').Router();
+const validateProjectId = require('./validateProjectId.js');
+const validateProject = require('./validateProject.js');
 
 // 5 update path for the require
 const Projects = require('../projects/projectModel.js');
 
 
 
-router.post('/', (req, res) => {
+router.post('/', validateProject, (req, res) => {
     const project = req.body;
     Projects.insert(project)
         .then(id => {
@@ -42,7 +44,6 @@ router.post('/', (req, res) => {
 //         })
 // });
 
-// GET	/api/projects	Returns an array of all the project objects contained in the database.
 router.get('/', (req, res) => {
 
   const query = req.query.id;
@@ -60,8 +61,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// GET	/api/projects/:id	Returns the project object with the specified id.
-router.get('/:id', (req, res) => {
+router.get('/:id', validateProjectId, (req, res) => {
   Projects.findById(req.params.id)
     .then(project => {
       if (project) {
