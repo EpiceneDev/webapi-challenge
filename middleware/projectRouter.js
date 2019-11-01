@@ -2,7 +2,6 @@ const router = require('express').Router();
 
 // 5 update path for the require
 const Project = require('../projects/projectModel.js');
-const Actions = require('../actions/actionModel.js');
 
 
 // 3
@@ -54,7 +53,7 @@ const Actions = require('../actions/actionModel.js');
 // GET	/api/posts	Returns an array of all the post objects contained in the database.
 router.get('/', (req, res) => {
 
-  const query = req.query;
+  const query = req.query.id;
 
   Project.get(query)
     .then(projects => {
