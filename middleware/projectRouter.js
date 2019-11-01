@@ -1,7 +1,9 @@
 const router = require('express').Router();
 
 // 5 update path for the require
-const Project = require('../data/helpers/projectModel');
+const Project = require('../projects/projectModel.js');
+const Actions = require('../actions/actionModel.js');
+
 
 // 3
 // this router handles requests beginning with /api/posts
@@ -54,7 +56,7 @@ router.get('/', (req, res) => {
 
   const query = req.query;
 
-  Project.find(query)
+  Project.get(query)
     .then(projects => {
       res.status(200).json(projects);
     })
