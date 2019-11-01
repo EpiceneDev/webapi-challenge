@@ -27,7 +27,8 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 - [ ] Mention two parts of Express that you learned about this week.
 
     1. Express is a middleware that has methods attached to it.
-    2. Express helps with DRY code. It has a router that eliminates the need to rewrite the full path of endpoints as well as communicating location based on the uri.
+
+    2. Express helps with DRY code.                   It has a router that eliminates the need to rewrite the full path of endpoints as well as communicating location based on the uri.
 
 - [ ] Describe Middleware?
 
