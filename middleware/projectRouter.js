@@ -12,7 +12,6 @@ router.post('/', (req, res) => {
             res.status(201).json(id);
         })
         .catch(error => {
-            // log error to database
             console.log(error);
             res.status(500).json({
                 message: 'Error adding the project',
@@ -20,10 +19,9 @@ router.post('/', (req, res) => {
     });
 });
 
-// //project	/api/projects/:id/comments	Creates a comment for the project with the specified id using information sent inside of the request body.
-// router.project('/:id/comments', (req, res) => {
-//     const comment = { text: req.body.text, project_id: req.params.id };
-//     db.findById(req.params.id)
+// router.getProjectActions('/:id/actions', (req, res) => {
+//     const action = { text: req.body.text, project_id: req.params.id };
+//     Projects.findById(req.params.id)
 //         .then(project => {
 //           if (project) {
 //             if (comment.text && comment.project_id) {
@@ -62,24 +60,24 @@ router.get('/', (req, res) => {
     });
 });
 
-// // GET	/api/projects/:id	Returns the project object with the specified id.
-// router.get('/:id', (req, res) => {
-//   projects.findById(req.params.id)
-//     .then(project => {
-//       if (project) {
-//         res.status(200).json(project);
-//       } else {
-//         res.status(404).json({ message: 'project not found' });
-//       }
-//     })
-//     .catch(error => {
-//       // log error to database
-//       console.log(error);
-//       res.status(500).json({
-//         message: 'Error retrieving the project',
-//       });
-//     });
-// });
+// GET	/api/projects/:id	Returns the project object with the specified id.
+router.get('/:id', (req, res) => {
+  Projects.findById(req.params.id)
+    .then(project => {
+      if (project) {
+        res.status(200).json(project);
+      } else {
+        res.status(404).json({ message: 'project not found' });
+      }
+    })
+    .catch(error => {
+      // log error to database
+      console.log(error);
+      res.status(500).json({
+        message: 'Error retrieving the project',
+      });
+    });
+});
 
 
 router.delete('/:id', (req, res) => {
