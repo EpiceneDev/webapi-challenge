@@ -1,7 +1,7 @@
 const Projects = require("../projects/projectModel.js");
 function validateProjectId(req, res, next) {
  const { id } = req.params;
- Projects.getById(id).then(project => {
+ Projects.get(id).then(project => {
    if (project) {
      req.project = project;
      next();

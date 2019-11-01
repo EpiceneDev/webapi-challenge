@@ -1,7 +1,10 @@
 function validateProject(req, res, next) {
-    req.body ? req.body.text ? next() :
-    res.status(400).json({ message: "missing required text field" }) :
-    res.status(400).json({ message: "missing post data" });
-}
-
-module.exports = validateProject;
+    req.body
+      ? req.body
+        ? next()
+        : res.status(400).json({ message: "missing required fields." })
+      : res.status(500).json({ message: "missing project data" });
+  }
+  
+  module.exports = validateProject;
+  
