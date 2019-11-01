@@ -23,6 +23,22 @@ router.get("/", (req, res) => {
 //      });
 //  }
 // });
+
+router.post('/', (req, res) => {
+    const action = req.body;
+    Actions.insert(action)
+        .then(id => {
+            res.status(201).json(id);
+        })
+        .catch(error => {
+            // log error to database
+            console.log(error);
+            res.status(500).json({
+                message: 'Error adding the project',
+            });
+    });
+});
+
 // router.delete("/:id", validatePostId, (req, res) => {
 //  if (req.post) {
 //    Posts.remove(req.post)
@@ -46,7 +62,9 @@ router.get("/", (req, res) => {
 //      });
 //  }
 // });
-// // custom middleware
+
+
+// custom middleware
 // function validatePostId(req, res, next) {
 //  const id = req.params.id;
 //  Posts.getById(id)

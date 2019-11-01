@@ -1,39 +1,33 @@
 const router = require('express').Router();
 
 // 5 update path for the require
-const Project = require('../projects/projectModel.js');
+const Projects = require('../projects/projectModel.js');
 
 
-// 3
-// this router handles requests beginning with /api/posts
-// so we remove that part of the URI and replace it with a /
 
-// 4 rename server. to router.
+router.post('/', (req, res) => {
+    const project = req.body;
+    Projects.insert(project)
+        .then(id => {
+            res.status(201).json(id);
+        })
+        .catch(error => {
+            // log error to database
+            console.log(error);
+            res.status(500).json({
+                message: 'Error adding the project',
+            });
+    });
+});
 
-// POST	/api/posts	Creates a post using the information sent inside the request body.
-// router.post('/', (req, res) => {
-//     const post = req.body;
-//     Posts.insert(post)
-//         .then(id => {
-//             res.status(201).json(id);
-//         })
-//         .catch(error => {
-//             // log error to database
-//             console.log(error);
-//             res.status(500).json({
-//                 message: 'Error adding the post',
-//             });
-//     });
-// });
-
-// //POST	/api/posts/:id/comments	Creates a comment for the post with the specified id using information sent inside of the request body.
-// router.post('/:id/comments', (req, res) => {
-//     const comment = { text: req.body.text, post_id: req.params.id };
+// //project	/api/projects/:id/comments	Creates a comment for the project with the specified id using information sent inside of the request body.
+// router.project('/:id/comments', (req, res) => {
+//     const comment = { text: req.body.text, project_id: req.params.id };
 //     db.findById(req.params.id)
-//         .then(post => {
-//           if (post) {
-//             if (comment.text && comment.post_id) {
-//               Posts.insertComment(comment)
+//         .then(project => {
+//           if (project) {
+//             if (comment.text && comment.project_id) {
+//               projects.insertComment(comment)
 //                 .then(comment => {
 //                   res.status(201).json(comment)
 //                 })
@@ -41,7 +35,7 @@ const Project = require('../projects/projectModel.js');
 //                 res.status(400).json({ errorMessage: "Please provide text for the comment."})
 //               }   
 //             } else {
-//               res.status(404).json({ message: "The post with the specified ID does not exist." })
+//               res.status(404).json({ message: "The project with the specified ID does not exist." })
 //             }
 //         })
 //         .catch(error => {
@@ -50,12 +44,12 @@ const Project = require('../projects/projectModel.js');
 //         })
 // });
 
-// GET	/api/posts	Returns an array of all the post objects contained in the database.
+// GET	/api/projects	Returns an array of all the project objects contained in the database.
 router.get('/', (req, res) => {
 
   const query = req.query.id;
 
-  Project.get(query)
+  Projects.get(query)
     .then(projects => {
       res.status(200).json(projects);
     })
@@ -68,76 +62,74 @@ router.get('/', (req, res) => {
     });
 });
 
-// // GET	/api/posts/:id	Returns the post object with the specified id.
+// // GET	/api/projects/:id	Returns the project object with the specified id.
 // router.get('/:id', (req, res) => {
-//   Posts.findById(req.params.id)
-//     .then(post => {
-//       if (post) {
-//         res.status(200).json(post);
+//   projects.findById(req.params.id)
+//     .then(project => {
+//       if (project) {
+//         res.status(200).json(project);
 //       } else {
-//         res.status(404).json({ message: 'post not found' });
+//         res.status(404).json({ message: 'project not found' });
 //       }
 //     })
 //     .catch(error => {
 //       // log error to database
 //       console.log(error);
 //       res.status(500).json({
-//         message: 'Error retrieving the post',
+//         message: 'Error retrieving the project',
 //       });
 //     });
 // });
 
 
-// // DELETE	/api/posts/:id	Removes the post with the specified id and returns the deleted post object. You may need to make additional calls to the database in order to satisfy this requirement.
-// router.delete('/:id', (req, res) => {
-//   Posts.remove(req.params.id)
-//     .then(count => {
-//       if (count > 0) {
-//         res.status(200).json({ message: 'The post has been nuked' });
-//       } else {
-//         res.status(404).json({ message: 'The post could not be found' });
-//       }
-//     })
-//     .catch(error => {
-//       // log error to database
-//       console.log(error);
-//       res.status(500).json({
-//         message: 'Error removing the post',
-//       });
-//     });
-// });
+router.delete('/:id', (req, res) => {
+  Projects.remove(req.params.id)
+    .then(count => {
+      if (count > 0) {
+        res.status(200).json({ message: 'The project has been nuked' });
+      } else {
+        res.status(404).json({ message: 'The project could not be found' });
+      }
+    })
+    .catch(error => {
+      // log error to database
+      console.log(error);
+      res.status(500).json({
+        message: 'Error removing the project',
+      });
+    });
+});
 
-// // PUT	/api/posts/:id	Updates the post with the specified id using data from the request body. Returns the modified document, NOT the original.
-// router.put('/:id', (req, res) => {
-//   const changes = req.body;
-//   const id = req.params.id;
-//   Posts.update(id, changes)
-//     .then(post => {
-//       if (post) {
-//         res.status(201).json(changes);
-//       } else {
-//         res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
-//       }
-//     })
-//     .catch(error => {
-//       // log error to database
-//       console.log(error);
-//       res.status(500).json({
-//         error: "There was an error while saving the post to the database"
-//       }).end();
-//     });
-// });
+router.put('/:id', (req, res) => {
+  const changes = req.body;
+  const id = req.params.id;
+  Projects.update(id, changes)
+    .then(project => {
+      if (project) {
+        res.status(201).json(changes);
+      } else {
+        res.status(400).json({ errorMessage: "Please provide title and contents for the project." });
+      }
+    })
+    .catch(error => {
+      // log error to database
+      console.log(error);
+      res.status(500).json({
+        error: "There was an error while saving the project to the database"
+      }).end();
+    });
+});
 
 
-// // GET	/api/posts/:id/comments	Returns an array of all the comment objects associated with the post with the specified id.
+// // GET	/api/projects/:id/comments	Returns an array of all the comment objects associated with the project with the specified id.
 // router.get('/:id/comments', (req, res) => {
-//     const postId = req.params.id;
-//     Posts.findCommentById(postId)
+//     const projectId = req.params.id;
+//     projects.findCommentById(projectId)
 //         .then(comments => { 
 //             if (comments.length) {
 //                 res.status(201).json(comments);
 //             } else {
-//                 res.status(404).json({ errorMessage: "The post with the specified ID does not exist." });
+//                 res.status(404).json({ errorMessage: "The project with the specified ID does not exist." });
 //             }
 //         })
 //         .catch(error => {
@@ -153,9 +145,25 @@ router.get('/', (req, res) => {
 
 // router.get('/:id/threads', (req, res) => {});
 
-// add an endpoint that returns all the messages for a post
-// add an endpoint for adding new message to a post
+// add an endpoint that returns all the messages for a project
+// add an endpoint for adding new message to a project
 
 // export default router; // ES Modules
+
+// function validatePostId(req, res, next) {
+//     const id = req.params.id;
+//     Posts.getById(id)
+//       .then(post => {
+//         if (!post) {
+//           res.status(404).json(`Post with ${id} does not exist.`);
+//         } else {
+//           req.post = id;
+//           next();
+//         }
+//       })
+//       .catch(err => {
+//         res.status(500).json({ message: "Error updating post" });
+//       });
+//    }
 
 module.exports = router;
